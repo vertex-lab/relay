@@ -48,7 +48,7 @@ func (s Server) StartAndServe(ctx context.Context, address string) error {
 
 	server := &http.Server{
 		Addr:              address,
-		Handler:           mux,
+		Handler:           withCORS(mux),
 		ReadHeaderTimeout: s.config.ReadHeaderTimeout,
 		IdleTimeout:       s.config.IdleTimeout,
 	}
@@ -73,6 +73,21 @@ func (s Server) StartAndServe(ctx context.Context, address string) error {
 	case err := <-exit:
 		return err
 	}
+}
+
+// withCORS adds the CORS headers required by the Open Ranking protocol on all responses
+// and handles OPTIONS preflight requests.
+func withCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 // Capabilities serves GET /.well-known/open-ranking.json (ORE-01).
