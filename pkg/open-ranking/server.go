@@ -126,6 +126,10 @@ func (s Server) StatsPubkey(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	res, err := s.service.StatsPubkey(ctx, req)
+	if errors.Is(err, ranking.ErrUnknownPubkey) {
+		ore.WriteError(w, ore.ErrNotFound("pubkey not found"))
+		return
+	}
 	if err != nil {
 		ore.WriteError(w, ore.ErrInternal("internal error"))
 		slog.Error("openranking: stats pubkey error", "request", req, "error", err)
@@ -258,6 +262,10 @@ func (s Server) Followers(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 
 	res, err := s.service.Followers(ctx, req)
+	if errors.Is(err, ranking.ErrUnknownPubkey) {
+		ore.WriteError(w, ore.ErrNotFound("pubkey not found"))
+		return
+	}
 	if err != nil {
 		ore.WriteError(w, ore.ErrInternal("internal error"))
 		slog.Error("openranking: followers error", "request", req, "error", err)
