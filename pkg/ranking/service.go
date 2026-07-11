@@ -29,10 +29,10 @@ var (
 	PersonalizedPagerank ore.AlgorithmID = "personalized-pagerank"
 	SignatureProof       ore.AlgorithmID = "signature-proof"
 
-	GlobalPagerankAlgo       = ore.Algorithm{ID: GlobalPagerank, Name: "Global PageRank", Description: "Global PageRank over the Nostr follow graph."}
-	FollowersCountAlgo       = ore.Algorithm{ID: FollowersCount, Name: "Followers Count", Description: "Follower count in the Nostr follow graph."}
-	PersonalizedPagerankAlgo = ore.Algorithm{ID: PersonalizedPagerank, Name: "Personalized PageRank", Description: "PageRank relative to a point of view.", POV: true}
-	SignatureProofAlgo       = ore.Algorithm{ID: SignatureProof, Name: "Signature Proof", Description: "Detects compromised keys via leaked private key signatures. Defined in ORE-08"}
+	GlobalPagerankAlgo       = ore.Algorithm{ID: GlobalPagerank, Name: "Influence", Description: "Discover trusted, high-reputation voices across the entire network."}
+	FollowersCountAlgo       = ore.Algorithm{ID: FollowersCount, Name: "Most Followed", Description: "See who has the largest audience on the platform."}
+	PersonalizedPagerankAlgo = ore.Algorithm{ID: PersonalizedPagerank, Name: "Most Relevant", Description: "Find profiles that are closest to you and your social circle.", POV: true}
+	SignatureProofAlgo       = ore.Algorithm{ID: SignatureProof, Name: "Security Check", Description: "Identify compromised profiles by detecting leaked keys"}
 )
 
 // The capability document representing what this package actually supports.
