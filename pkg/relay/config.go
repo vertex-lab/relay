@@ -14,6 +14,13 @@ type Config struct {
 	Processors    int    `env:"RELAY_PROCESSORS"`
 	SecretKey     string `env:"RELAY_SECRET_KEY"`
 	PublicKey     string `env:"-"`
+	Name          string `env:"RELAY_NAME"`
+	Description   string `env:"RELAY_DESCRIPTION"`
+	Icon          string `env:"RELAY_ICON"`
+	Contact       string `env:"RELAY_CONTACT"`
+	// OperatorPublicKey is advertised in NIP-11, independently of the signing key.
+	// An empty value falls back to PublicKey.
+	OperatorPublicKey string `env:"RELAY_OPERATOR_PUBKEY"`
 }
 
 // NewConfig returns a relay configuration structure with default paramenters.
@@ -22,6 +29,9 @@ func NewConfig() Config {
 		Address:       "localhost:3334",
 		QueueCapacity: 1000,
 		Processors:    4,
+		Name:          "Vertex Relay",
+		Description:   "Web of Trust Relay powered by Vertex",
+		Icon:          "https://image.nostr.build/7afc9d727d6486851cc2fe09865e7cc383449f8bad1700a9508db4d2815b6f1a.png",
 	}
 }
 
@@ -37,6 +47,9 @@ func (c *Config) Init() error {
 }
 
 func (c Config) Validate() error {
+	if c.OperatorPublicKey != "" && !nostr.IsValidPublicKey(c.OperatorPublicKey) {
+		return errors.New("operator public key is invalid")
+	}
 	if c.QueueCapacity < 0 {
 		return fmt.Errorf("queue capacity value must be positive: %d", c.QueueCapacity)
 	}

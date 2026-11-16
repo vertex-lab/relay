@@ -39,12 +39,13 @@ func Setup(
 ) *rely.Relay {
 
 	info := nip11.RelayInformationDocument{
-		Name:          "Vertex Relay",
-		Description:   "Web of Trust Relay powered by Vertex",
-		PubKey:        config.PublicKey,
+		Name:          config.Name,
+		Description:   config.Description,
+		PubKey:        cmp.Or(config.OperatorPublicKey, config.PublicKey),
+		Contact:       config.Contact,
 		SupportedNIPs: []any{1, 11, 42, 45, 50},
 		Software:      "https://github.com/vertex-lab/relay",
-		Icon:          "https://image.nostr.build/7afc9d727d6486851cc2fe09865e7cc383449f8bad1700a9508db4d2815b6f1a.png",
+		Icon:          config.Icon,
 	}
 
 	relay := rely.NewRelay(
